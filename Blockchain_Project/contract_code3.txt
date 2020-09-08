@@ -1,0 +1,94 @@
+pragma solidity ^0.4.22;
+
+contract FineSystem {
+   
+    // account address of the manager
+    address private manager;
+    
+    //the object fine/ticket
+    struct Fine {           //the object fine/ticket
+        uint fineId;        //fine number
+        uint ofId;          //offender ID
+        uint license;       //offender's driving license
+        uint plateNum;      //vehicle plate number
+        string date;        //date of the offense
+        string fineType;    //type of the fine (speeding,parking...)
+        uint payAmount;     //the amount to pay
+        bool paid;          //indicating if fine was paid
+    }
+    
+    //hash for storing fines' data
+    mapping(uint => Fine) private fines;
+    
+    //ammount of fines issued (will define fine numbers)
+    uint private fineCount = 0;
+    
+    //Constructor function, 
+    //sets address of Manager to the account address that deployed the contract
+    constructor() public {
+        manager = msg.sender;
+    }
+    
+    //function for adding new fines
+    function addFine (uint _ofId, uint _license, uint _plateNum, string _date, string _fineType, uint _payAmount) public {
+        //make sure only manager of contract can add a new fine
+        require(msg.sender == manager);
+        
+        fineCount ++;
+        fines[fineCount] = Fine(fineCount, _ofId, _license, _plateNum, _date, _fineType, _payAmount, false);
+    }
+    
+    //function for getting details of a certain fine, when given a fine number (fineId)
+    function getFine (uint _fineId) view public returns (uint,uint,uint,string,string,uint,bool){
+        //don't execute if the given fine number doesn't exist
+        require(_fineId > 0 && _fineId <= fineCount);
+        
+        Fine memory f = fines[_fineId];
+        return (f.ofId, f.license, f.plateNum, f.date, f.fineType, f.payAmount, f.paid);
+    }
+    
+    
+    function payFine(uint _fineId) payable public{
+        //don't execute if the given fine number doesn't exist
+        require(_fineId > 0 && _fineId <= fineCount);
+        
+        //don't execute if ether amount received by function doesn't equal fine payment amount
+        require(msg.value >= fines[_fineId].payAmount);
+        
+        //don't execute if fine was already paid
+        require(fines[_fineId].paid == false);
+        
+        fines[_fineId].paid = true;
+    }
+    
+    
+    //function for adding new fines
+    function editFine (uint _fineId, uint _ofId, uint _license, uint _plateNum, string _date, string _fineType, uint _payAmount, bool _paid) public {
+        //don't execute if the given fine number doesn't exist
+        require(_fineId > 0 && _fineId <= fineCount);
+        
+        //make sure only manager of contract can edit fine details after fine was added
+        require(msg.sender == manager);
+        
+        fines[_fineId] = Fine(_fineId, _ofId, _license, _plateNum, _date, _fineType, _payAmount, _paid);
+    }
+    
+     //get the current number of fines in the system
+    function getFineCount() view public returns (uint) {
+        return fineCount;
+    }
+    
+    
+    //returns the amount of money (in wei) the contract holds
+    function getContractBalance() view public returns (uint){
+        return address(this).balance;    
+    }
+    
+    //function that transfers all contract funds to manager's account
+    function transferBalance() public {
+        //only the contract manager can transfer all contract's gathered ether to his account
+        require(msg.sender == manager);
+        
+        manager.transfer(address(this).balance);
+    }
+}
