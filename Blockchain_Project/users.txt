@@ -1,7 +1,2 @@
-
-user   password   acccount                                   private key
 e5n9f0 k1j8_hu7 1 0x9324c0F89Ee42c477E675733b0742992a89eC84F 0c9dc7325c65b52e3e67fb804f2d3d1f5b859ac907bf6cd38deccc6f8739036d
 o4f1n6 m1+d5wb3 2 0xE1659EF146ec1EB79461B71b0c8Be0F3D7F50f2C 0934225ef597866064127ce4148518b0b224ecff7203e10e9df6ec01e4dbf85f
-
-1-manager
-2-payer
