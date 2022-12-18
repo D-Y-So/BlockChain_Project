@@ -3,7 +3,7 @@ Fines payment system.
 
 Developed using: Python (Web3.py), Solidity, Ethereum Blockchain.
 
-login info:
+login info for testing:
 
 username: e5n9f0 , password: k1j8_hu7	, role: manager
 
