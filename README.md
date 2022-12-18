@@ -1,6 +1,6 @@
 # Blockchain_Project
-Fine payment system, developed using Python, Solidity, Ethereum Blockchain.
-Using library Web3.py
+Fines payment system.
+developed using: Python (Web3.py), Solidity, Ethereum Blockchain.
 
 login info:
 
